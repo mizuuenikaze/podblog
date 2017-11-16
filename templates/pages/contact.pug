@@ -1,0 +1,27 @@
+section.page.contact
+  div.container
+    div.alert.alert-danger.hidden(role="alert" data-hook="error-message")
+      span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
+      span.sr-only Error:
+
+  //- jumbotron
+  div.jumbotron
+    p &nbsp;
+    div.container
+      div
+        picture
+          source(data-srcset="/images/flower_200w.jpg 200w, /images/flower_200w.jpg 200w" media="--small")
+          source(data-srcset="/images/flower_300w.jpg 300w, /images/flower_300w.jpg 300w" media="--medium")
+          source(data-srcset="/images/flower_600w.jpg 600w, /images/flower_600w.jpg 600w" media="--large")
+          source(data-srcset="/images/flower_900w.jpg 900w")
+          img.lazyload(data-src="holder.js/75px56p?theme=custom&font=Glyphicons Halflings&text=%EE%81%86&auto=yes" data-sizes="auto")
+
+  //- grid content
+  div.container
+    div.row
+      div.col-sm-12
+        p.text-center(data-hook="outl-a.a")
+    div.row
+      div.col-sm-12
+        p.text-center
+          a.btn.btn-primary(role="button" href="https://facebook.com/fernando.cano.79827803") Facebook
