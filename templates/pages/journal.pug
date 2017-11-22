@@ -8,25 +8,19 @@ section.page.journal
   div.jumbotron
     p &nbsp;
     div.container
-      div
+      div.picoverlay
         picture
           source(data-srcset="/images/flower_200w.jpg 200w, /images/flower_200w.jpg 200w" media="--small")
           source(data-srcset="/images/flower_300w.jpg 300w, /images/flower_300w.jpg 300w" media="--medium")
           source(data-srcset="/images/flower_600w.jpg 600w, /images/flower_600w.jpg 600w" media="--large")
           source(data-srcset="/images/flower_900w.jpg 900w")
           img.lazyload(data-src="holder.js/75px56p?theme=custom&font=Glyphicons Halflings&text=%EE%81%86&auto=yes" data-sizes="auto")
+        div.caption
+          h1(data-hook="outl-a.a")
 
   //- grid content
   div.container
     div.row
       div.col-sm-12
-        p.text-center
-          a.btn.btn-primary(role="button" href="https://fernandoc.goherbalife.com") Go to our Products
-    div.row
-      div.col-sm-2
-        p &nbsp;
-      div.col-sm-10
-        h3 Entry 2017-08-24
-        p.lead Starting a new regimen.  Goals for this period are muscle mass and endurance increases.
-      div.col-sm-2
-        p &nbsp;
+        p.text-center &nbsp;
+    div.row(data-hook="blog-entry")

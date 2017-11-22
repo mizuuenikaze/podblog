@@ -11,7 +11,7 @@ var serveStatic = require('serve-static');
 var stylizer = require('stylizer');
 var templatizer = require('puglatizer');
 var app = express();
-var contextPath = '/fitsingle';
+var contextPath = '/podblog';
 
 // a little helper for fixing paths for various environments
 var fixPath = function (pathString) {
@@ -39,7 +39,7 @@ if (!config.isDev) {
     app.use(helmet.xframe());
 }
 app.use(helmet.xssFilter());
-app.use(helmet.nosniff());
+app.use(helmet.noSniff());
 
 app.set('view engine', 'pug');
 
@@ -80,8 +80,8 @@ var allLibraries = [];
 
 new Moonboots({
     moonboots: {
-        jsFileName: 'fitsingle',
-        cssFileName: 'fitsingle',
+        jsFileName: 'podblog',
+        cssFileName: 'podblog',
         main: fixPath('client/app.js'),
         developmentMode: config.isDev,
         libraries: allLibraries,

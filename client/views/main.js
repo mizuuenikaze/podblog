@@ -35,7 +35,8 @@ module.exports = View.extend({
         this.renderWithTemplate(this);
 
         // init and configure our page switcher
-        this.pageSwitcher = new ViewSwitcher(this.queryByHook('page-container'), {
+        this.pageSwitcher = new ViewSwitcher({
+			el: this.queryByHook('page-container'),
             show: function (newView, oldView) {
                 // it's inserted and rendered for me
                 document.title = _.result(newView, 'pageTitle') || 'massage';
@@ -63,7 +64,7 @@ module.exports = View.extend({
 					}
 
 					if (window.Affix) {
-						app.maiView.handleBootstrapNative(app.mainView.el);
+						app.mainView.handleBootstrapNative(app.mainView.el);
 					}
 				}
 
