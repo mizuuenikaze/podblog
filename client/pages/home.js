@@ -3,6 +3,7 @@ var templates = require('../templates');
 var ListView = require('../views/list');
 var BlogPagingCollection = require('../models/blogEntryCollection');
 var _ = require('lodash');
+var PaginatorView = require('../views/paginator');
 
 
 module.exports = PageView.extend({
@@ -23,13 +24,23 @@ module.exports = PageView.extend({
 	},
 	fetchCollection: function () {
 		this.collection = new BlogPagingCollection();
+
 		this.collection.fetchPage({
 			remove: true,
 			merge: false,
 			add: true,
-			stepNext: true,
-			step: 0,
 			data: {mode: 'linkedlist'}
 		});
+	},
+	subviews: {
+		paginator: {
+			hook: 'paginator',
+			prepareView: function (el) {
+				return new PaginatorView({
+					el: el,
+					collection: this.collection
+				});
+			}
+		}
 	}
 });

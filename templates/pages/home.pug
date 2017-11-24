@@ -10,11 +10,11 @@ section.page.home
     div.container
       div.picoverlay
         picture
-          source(data-srcset="/images/flower_200w.jpg 200w, /images/flower_200w.jpg 200w" media="--small")
-          source(data-srcset="/images/flower_300w.jpg 300w, /images/flower_300w.jpg 300w" media="--medium")
-          source(data-srcset="/images/flower_600w.jpg 600w, /images/flower_600w.jpg 600w" media="--large")
-          source(data-srcset="/images/flower_900w.jpg 900w")
-          img.lazyload(data-src="holder.js/75px56p?theme=custom&font=Glyphicons Halflings&text=%EE%81%86&auto=yes" data-sizes="auto")
+          source(data-srcset="/images/finerpoints_100w.jpg 100w, /images/finerpoints_100w.jpg 100w" media="--small")
+          source(data-srcset="/images/finerpoints_200w.jpg 200w, /images/finerpoints_200w.jpg 200w" media="--medium")
+          source(data-srcset="/images/finerpoints_300w.jpg 300w, /images/finerpoints_300w.jpg 300w" media="--large")
+          source(data-srcset="/images/finerpoints_600w.jpg 600w")
+          img.lazyload(data-src="holder.js/50px56p?theme=custom&font=Glyphicons Halflings&text=%EE%81%86&auto=yes" data-sizes="auto")
         div.caption
           h1(data-hook="outl-a.a")
 
@@ -31,3 +31,7 @@ section.page.home
           ul.list-group(data-hook="pod-list")
       div.col-sm-3
         p.text-right &nbsp;
+    //- pager
+    div.row
+      div.col-sm-12(data-hook="paginator")
+    
