@@ -11,6 +11,7 @@ module.exports = View.extend({
 			el.textContent = ts.toLocaleString('en-US', {hour12: false, timeZone: 'UTC'});
 		}, hook: 'timestamp'},
 		'model.id': {type: function (el, value, previousValue) { el.href='journal?id=' + value;}, hook: 'title'},
-		'model.value': {type: 'text', hook: 'title'}
+		'model.value.title': {type: 'text', hook: 'title'},
+		'model.value.icon': {type: 'class', hook: 'marker'}
 	}
 });

@@ -6,7 +6,7 @@ module.exports = AmpersandModel.extend({
 	props: {
 		id: ['string', 'true', ''],
 		key: ['number', 'true', ''],
-		value: ['string', 'true', '']
+		value: 'object'
 	},
 	initialize: function (attrs) {
 		this.ajaxConfig = app.configureAjax.bind(app);

@@ -1,8 +1,11 @@
 div.row
   div.col-sm-8
-    h2(data-hook="title")
-    h3(data-hook="subtitle")
-    div(data-hook="content")
+    div.card
+      picture(data-hook="pic")
+      h2.card-header.bg-light(data-hook="title")
+      div.card-body
+        h3.card-title(data-hook="subtitle")
+        div.card-text(data-hook="content")
 
   div.col-sm-4
     div.text-info.text-right

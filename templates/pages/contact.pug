@@ -1,8 +1,5 @@
 section.page.contact
-  div.container
-    div.alert.alert-danger.hidden(role="alert" data-hook="error-message")
-      span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
-      span.sr-only Error:
+  div(data-hook="error-container")
 
   //- jumbotron
   div.jumbotron
@@ -14,7 +11,7 @@ section.page.contact
           source(data-srcset="/images/flower_300w.jpg 300w, /images/flower_300w.jpg 300w" media="--medium")
           source(data-srcset="/images/flower_600w.jpg 600w, /images/flower_600w.jpg 600w" media="--large")
           source(data-srcset="/images/flower_900w.jpg 900w")
-          img.lazyload(data-src="holder.js/75px56p?theme=custom&font=Glyphicons Halflings&text=%EE%81%86&auto=yes" data-sizes="auto")
+          img.lazyload(data-src="holder.js/75px56p?theme=custom&text=%EF%80%B0&auto=yes" data-sizes="auto")
 
   //- grid content
   div.container
