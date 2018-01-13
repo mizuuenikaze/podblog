@@ -125,7 +125,7 @@ app.extend({
 		}
 	},
 	handleError: function (error) {
-		app.currentPage.errorMessage = error.message;
+		app.currentPage.setErrorMessage(error.message);
 	},
 	injectScripts: function () {
 		var thisApp = this;

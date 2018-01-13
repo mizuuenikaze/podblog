@@ -91,7 +91,7 @@ module.exports = View.extend({
 				options.mainView.updateActiveNav();
 			},
 			error: function (model, response, options) {
-				options.pageView.errorMessage = response.rawRequest.responseText;
+				options.pageView.setErrorMessage(response.rawRequest.responseText);
 			}
 		});
     },
