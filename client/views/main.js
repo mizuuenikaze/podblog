@@ -75,7 +75,7 @@ module.exports = View.extend({
         });
 
         // setting a favicon for fun (note, it's dynamic)
-        setFavicon('/favicon_f.ico');
+        setFavicon('/favicon_p.ico');
         return this;
     },
 
