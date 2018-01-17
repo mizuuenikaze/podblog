@@ -1,12 +1,8 @@
 section.page.journal
-  div.container
-    div.alert.alert-danger.hidden(role="alert" data-hook="error-message")
-      span.glyphicon.glyphicon-exclamation-sign(aria-hidden="true")
-      span.sr-only Error:
+  div(data-hook="error-container")
 
   //- jumbotron
   div.jumbotron
-    p &nbsp;
     div.container
       div.picoverlay
         picture
@@ -14,7 +10,7 @@ section.page.journal
           source(data-srcset="/images/finerpoints_200w.jpg 200w, /images/finerpoints_200w.jpg 200w" media="--medium")
           source(data-srcset="/images/finerpoints_300w.jpg 300w, /images/finerpoints_300w.jpg 300w" media="--large")
           source(data-srcset="/images/finerpoints_600w.jpg 600w")
-          img.lazyload(data-src="holder.js/50px56p?theme=custom&font=Glyphicons Halflings&text=%EE%81%86&auto=yes" data-sizes="auto")
+          img.lazyload(data-src="holder.js/50px56p?theme=custom&text=%EF%80%B0&auto=yes" data-sizes="auto")
         div.caption
           h1(data-hook="outl-a.a")
 

@@ -10,57 +10,69 @@ var defaultFetchOptions = {
 	data: {mode: 'linkedlist'}
 };
 
+var negativeDelta = 'li > button[data-delta^="-"]';
+var positiveDelta = 'li > button:not([data-delta^="-"])';
+
 module.exports = View.extend({
 	template: templates.includes.paginator,
+	props: {
+		prevpages: 'array',
+		nextpages: 'array'
+	},
 	events: {
-		'click [data-hook=prev_0]': 'fetchPrev0',
-		'click [data-hook=prev_1]': 'fetchPrev1',
-		'click [data-hook=prev_2]': 'fetchPrev2',
-		'click [data-hook=prev_3]': 'fetchPrev3',
-		'click [data-hook=prev_4]': 'fetchPrev4',
-		'click [data-hook=next_0]': 'fetchNext0',
-		'click [data-hook=next_1]': 'fetchNext1',
-		'click [data-hook=next_2]': 'fetchNext2',
-		'click [data-hook=next_3]': 'fetchNext3',
-		'click [data-hook=next_4]': 'fetchNext4'
+		'click [data-hook~=fetchPage]': 'paginate',
 	},
 	bindings: {
 		'prevpages': {type: function (el, value, previousValue) {
 			el = this.buildPagerLinks(el, value, false);
 
-			if (el.hasChildNodes()) {
+			if (el.querySelectorAll(negativeDelta).length != 0 && this.currentPage != 1) {
 				var childLink = document.createElement('button');
 				var childSpan = document.createElement('span');
-				dom.addClass(childLink, ['btn','btn-default']);
-				dom.addAttribute(childLink, 'type', 'button');
-				dom.addAttribute(childLink, 'data-hook', 'prev_arrow');
-				childLink.dataset.startKey = el.lastChild.dataset.startKey;
-				childLink.dataset.startKeyDocid = el.lastChild.dataset.startKeyDocid;
-				dom.addClass(span, ['glyphicon glyphicon-chevron-left']);
+				dom.addClass(childLink, ['btn','btn-info']);
+				dom.setAttribute(childLink, 'type', 'button');
+				dom.setAttribute(childLink, 'data-hook', 'fetchPage');
+
+				var prevButton = el.querySelector('li > button[data-delta="-1"]');
+				childLink.dataset.startKey = prevButton.dataset.startKey;
+				childLink.dataset.startKeyDocid = prevButton.dataset.startKeyDocid;
+				childLink.dataset.delta = prevButton.dataset.delta;
+				dom.addClass(childSpan, ['fas', 'fa-chevron-left']);
 				childLink.appendChild(childSpan);
-				el.insertBefore(childLink, el.firstChild);
+
+				var childItem = document.createElement('li');
+				dom.addClass(childItem, ['page-item', 'mr-1']);
+				childItem.appendChild(childLink);
+				el.insertBefore(childItem, el.firstChild);
 			} else {
-				dom.addClass(el, 'hidden');
+				if (this.currentPage === 1) {
+					this.unset('prevpages', {silent: true});
+				}
 			}
-		}, hook: 'prev-links'},
+		}, hook: 'page-links'},
 		'nextpages': {type: function (el, value, previousValue) {
 			el = this.buildPagerLinks(el, value, true);
 
-			if (el.hasChildNodes()) {
+			if (el.querySelectorAll(positiveDelta).length != 0) {
 				var childLink = document.createElement('button');
 				var childSpan = document.createElement('span');
-				dom.addClass(childLink, ['btn','btn-default']);
-				dom.addAttribute(childLink, 'type', 'button');
-				dom.addAttribute(childLink, 'data-hook', 'next_arrow');
-				childLink.dataset.startKey = el.firstChild.dataset.startKey;
-				childLink.dataset.startKeyDocid = el.firstChild.dataset.startKeyDocid;
-				dom.addClass(span, ['glyphicon glyphicon-chevron-right']);
+				dom.addClass(childLink, ['btn','btn-info']);
+				dom.setAttribute(childLink, 'type', 'button');
+				dom.setAttribute(childLink, 'data-hook', 'fetchPage');
+
+				var nextButton = el.querySelector('li > button[data-delta="1"]');
+				childLink.dataset.startKey = nextButton.dataset.startKey;
+				childLink.dataset.startKeyDocid = nextButton.dataset.startKeyDocid;
+				childLink.dataset.delta = nextButton.dataset.delta;
+				dom.addClass(childSpan, ['fas', 'fa-chevron-right']);
 				childLink.appendChild(childSpan);
-				el.appendChild(childLink);
-			} else {
-				dom.addClass(el, 'hidden');
+
+				var childItem = document.createElement('li');
+				dom.addClass(childItem, ['page-item', 'mr-1']);
+				childItem.appendChild(childLink);
+				el.appendChild(childItem);
 			}
-		}, hook: 'next-links'}
+		}, hook: 'page-links'}
 	},
 	initialize: function (viewOptions) {
 		var self = this;
@@ -82,96 +94,77 @@ module.exports = View.extend({
 		viewOptions.collection.on('sync', function(collection, response, options) {
 			var modes = ['offset', 'linkedlist'];
 
-			if (options.data.mode === modes[0]) {
-				self.prevpages = [{skip: response.offset > 0 ? response.offset-collection.data.limit : 0}];
-				self.nextpages = [{skip: response.rows.length >= collection.data.limit ? response.offset+collection.data.limit : 0}];
-			} else if (options.data.mode === modes[1]) {
+			if (options.data.mode === modes[1]) {
 				if (response.prevpages) {
-					self.prevpages = JSON.parse(response.prevpages);
+					self.prevpages = response.prevpages;
+				} else {
+					self.unset("prevpages");
 				}
 
 				if (response.nextpages) {
-					self.nextpages = JSON.parse(response.nextpages);
+					self.nextpages = response.nextpages;
+				} else {
+					self.unset("nextpages");
 				}
 			}
 		});
 	},
-	paginate: function (startKey, startKeyDocid) {
-		this.collection.fetchPage(_.assign({}, defaultFetchOptions, {
-			startkey: startKey,
-			startkey_docid: startKeyDocid
+	paginate: function (e) {
+		var buttonTarget = e.target.closest('[data-hook~=fetchPage]');
+
+		this.currentPage += parseInt(buttonTarget.dataset.delta);
+		this.collection.fetchPage(_.merge({}, defaultFetchOptions, {
+			data:{
+				startkey: buttonTarget.dataset.startKey,
+				startkey_docid: buttonTarget.dataset.startKeyDocid
+			}
 		}));
 	},
-	fetchNext0: function (e) {
-		this.curentPage += 1;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchNext1: function (e) {
-		this.curentPage += 2;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchNext2: function (e) {
-		this.curentPage += 3;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchNext3: function (e) {
-		this.curentPage += 4;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchNext4: function (e) {
-		this.curentPage += 5;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchPrev0: function (e) {
-		this.curentPage -= 1;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchPrev1: function (e) {
-		this.curentPage -= 2;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchPrev2: function (e) {
-		this.curentPage -= 3;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchPrev3: function (e) {
-		this.curentPage -= 4;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
-	fetchPrev4: function (e) {
-		this.curentPage -= 5;
-		this.paginate(e.target.dataset.startKey, e.target.dataset.startKeyDocid);
-	},
 	buildPagerLinks: function (el, pages, isNext) {
-		var hookPrefix = isNext ? 'next_' : 'prev_';
+
+		if (isNext) {
+			while (el.querySelectorAll(positiveDelta).length != 0) {
+				el.removeChild(el.lastChild);
+			}
+		} else {
+			while (el.querySelectorAll(negativeDelta).length != 0) {
+				el.removeChild(el.firstChild);
+			}
+		}
 
 		if (!pages) {
 			return el;
 		}
 
-		dom.removeClass(el, 'hidden');
-		while (el.hasChildNodes()) {
-			el.removeChild(el.lastChild);
-		}
-
+		var childItem;
 		var childLink;
+		var view = this;
 
-		pages.forEach(function (x, i) {
+		pages.forEach(function (x, i, origArray) {
 			if (i <= 4) {
 				childLink = document.createElement('button');
-				dom.text(childLink, isNext ? this.currentPage + i + 1 : this.currentPage - 5 + i );
-				dom.addClass(childLink, ['btn','btn-default']);
-				dom.addAttribute(childLink, 'type', 'button');
-				dom.addAttribute(childLink, 'data-hook', hookPrefix + i);
+				dom.text(childLink, isNext ? view.currentPage + i + 1 : view.currentPage - origArray.length  + i );
+				dom.addClass(childLink, ['btn','btn-info']);
+				dom.setAttribute(childLink, 'type', 'button');
+				dom.setAttribute(childLink, 'data-hook', 'fetchPage');
 
 				if (x.skip) {
-					dom.addAttribute(childLink, 'data-skip', x.skip);
+					dom.setAttribute(childLink, 'data-skip', x.skip);
 				} else {
-					dom.addAttribute(childLink, 'data-start-key', x.startkey);
-					dom.addAttribute(childLink, 'data-start-key-docid', x.startkey_docid);
+					dom.setAttribute(childLink, 'data-start-key', x.startkey);
+					dom.setAttribute(childLink, 'data-start-key-docid', x.startkey_docid);
+					dom.setAttribute(childLink, 'data-delta', (isNext ?  i + 1 : i - origArray.length));
 				}
 
-				el.appendChild(childLink);
+				childItem = document.createElement('li');
+				dom.addClass(childItem, ['page-item', 'mr-1']);
+				childItem.appendChild(childLink);
+
+				if (isNext) {
+					el.appendChild(childItem);
+				} else {
+					el.insertBefore(childItem, el.firstChild);
+				}
 			}
 		});
 
